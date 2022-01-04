@@ -5,7 +5,7 @@ A Modded-Minecraft Automation Assistant built in 'Computer Craft'/'CC: Tweaked' 
 
 ## To Do
 
-* Work of core disk
+* Isolate program to work from a core disk
 * Actively store all screen text to a file
 * Base rendering from said file - acting as a doubled buffer - will allow for future scrolling
 * Implement spatially-aware rendering (in regards to text lines, and text wrapping)
