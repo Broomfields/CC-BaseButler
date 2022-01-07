@@ -1,10 +1,5 @@
 -- Change to direction or find
 monitor = peripheral.find("monitor")
-monitor.setBackgroundColour(colors.gray)
-monitor.setTextColour(1)
-monitor.setTextScale(1)
-monitor.setCursorPos(1,1)
-monitor.clear()
 
 scale = 1
 
@@ -17,47 +12,102 @@ commandPhraseLength = string.len(commandPhrase)
 
 -- Functions
 
-function writeLine(text)
+
+-- Initialises a connected monitor
+function InitialiseMonitor()    --Called only by AssertMonitorPresent()
+    monitor.setBackgroundColour(colors.gray)
+    monitor.setTextColour(1)
+    monitor.setTextScale(1)
+    monitor.setCursorPos(1,1)
+    monitor.clear()
+end
+
+
+-- Outputs any given text, and if specified, any give text type to the computer and a connected monitor
+function WriteLine(text, typeText = "")
 
     print("cursorPosY = " .. posY)
     if text == nil then
-        print("Error - writeline(text) - text == nil")
+        print("Error - WriteLine(text) - text == nil")
     else
-        monitor.write(text)
+
+        -- Outputs to computer
+        if (typeText == nil) then
+            print(text)
+        else
+            print(typeText .. " - " .. text)
+        end    
+
+        -- Outputs to the monitor if one is present
+        if (AssertMonitorPresent() == true)
+
+            monitor.write(text)
         
-        posY = posY + scale
-        monitor.setCursorPos(posX, posY)
+            posY = posY + scale
+            monitor.setCursorPos(posX, posY)
+        end
     end
 end
 
 
-function newLine()
-    writeLine("")
+-- Outputs a new line to the computer
+function NewLine()
+    WriteLine("")
 end
 
 
-function computerLine(text)
+-- Outputs a formatted message from the program to the computer and a connected monitor
+function ComputerLine(text)
     monitor.setTextColour(colors.lightBlue)
-    writeLine(text)
+    WriteLine(text, "Computer")
 end
 
 
-function chatLine(text)
+-- Outputs a formatted message from chat to the computer and a connected monitor
+function ChatLine(text)
     monitor.setTextColour(colors.white)
-    writeLine(text)
+    WriteLine(text, "Chat")
 end
 
 
-function errorLine(text)
+-- Outputs a formatted error message to the computer and a connected monitor
+function ErrorLine(text)
     monitor.setTextColour(colors.red)
-    writeLine(text)
+    WriteLine(text, "Error")
 end
 
 
-function assertCommand(text)
+-- Asserts if a monitor is connected, relaying a relative message if this is a new change and initialising a monitor it was just connected
+function AssertMonitorPresent() -- Called in MainProcess()
+
+    local monitorWasPresent = !(monitor == nil)
+
+    monitor = peripheral.find("monitor")
+
+    if (monitor == nil) then
+        
+        if (monitorWasPresent == true) then
+            ErrorLine("Monitor has been disconnected!")
+        end
+
+        return false
+    else
+        
+        if (monitorWasPresent == false) then
+            ComputerLine("Monitor has been connected!")
+            InitialiseMonitor()
+        end
+
+        return true
+    end
+end
+
+
+-- Asserts that a command is present in the given text
+function AssertCommand(text)
 
     if text == nil then
-        print("Error - assertCommand(text) - text == nil")
+        print("Error - AssertCommand(text) - text == nil")
     else
         if string.len(text) >= commandPhraseLength then
             
@@ -80,23 +130,26 @@ function assertCommand(text)
 end
 
 
-function parseCommand(text)
+function ParseCommand(text)
     -- TODO
     return false
 end
 
 
--- Start Main Process
+
+-- \\\\\\\\\\\\\\\\\\\\\\\\\-
+-- # Start Main Process (Will be moved to a state machine at somepoint)
+-- \\\\\\\\\\\\\\\\\\\\\\\\\-
 
 local box = peripheral.find("chatBox") -- Finds the peripheral if one is connected
 
 if box == nil then
-   errorLine("chatBox not found")
+   ErrorLine("chatBox not found")
    
 end
 
-computerLine("Waiting for messages...")
-newLine()
+ComputerLine("Waiting for messages...")
+NewLine()
 
 local inError = false
 while inError == false do
@@ -106,24 +159,24 @@ while inError == false do
     local username = eventData[2]
     local message = eventData[3]
         
-    chatLine("<" .. username .. "> " .. message)
+    ChatLine("<" .. username .. "> " .. message)
 
     --Change to your username    
     if username == "Broomfields" then
-        if assertCommand(message) then
+        if AssertCommand(message) then
             
-            computerLine("### Command Identified ###")
+            ComputerLine("### Command Identified ###")
             box.sendMessage("Command Identified")
             
-            if parseCommand(message) then
-                computerLine("### Command Parsed ###")
+            if ParseCommand(message) then
+                ComputerLine("### Command Parsed ###")
                 box.sendMessage("Command Parsed")
             else
-                computerLine("### Command Not Parsed ### ")
+                ComputerLine("### Command Not Parsed ### ")
                 box.sendMessage("Command Not Parsed")
             end
         end
     end
 end
 
-computerLine("Terminating Instance.") 
+ComputerLine("Terminating Instance.") 
