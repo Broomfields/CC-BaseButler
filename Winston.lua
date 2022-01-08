@@ -81,7 +81,7 @@ function ComputerLine(text)
     end
 
     WriteLine(text, "Computer")
-    
+
 end
 
 
@@ -114,7 +114,7 @@ function AssertMonitorPresent() -- Called in MainProcess()
 
     local monitorWasPresent = (Monitor ~= nil)
 
-    Monitor = peripheral.find("Monitor")
+    Monitor = peripheral.find("monitor")
 
     if (Monitor ~= nil) then
         
