@@ -161,6 +161,8 @@ end
 -- Main Process Function (TODO : Turn in to State Machine)
 function MainProcess()
 
+    AssertMonitorPresent()
+
     local box = peripheral.find("chatBox") -- Finds the peripheral if one is connected
 
     if (box == nil) then
