@@ -56,7 +56,7 @@ function WriteLine(text, typeText)
         end    
 
         -- Outputs to the Monitor if one is present
-        if (AssertMonitorPresent() == true) then
+        if (Monitor ~= nil) then
 
             Monitor.write(text)
         
@@ -97,13 +97,13 @@ end
 -- Asserts if a Monitor is connected, relaying a relative message if this is a new change and initialising a Monitor it was just connected
 function AssertMonitorPresent() -- Called in MainProcess()
 
-    local MonitorWasPresent = (Monitor ~= nil)
+    local monitorWasPresent = (Monitor ~= nil)
 
     Monitor = peripheral.find("Monitor")
 
     if (Monitor ~= nil) then
         
-        if (MonitorWasPresent == false) then
+        if (monitorWasPresent == false) then
             ComputerLine("Monitor has been connected!")
             InitialiseMonitor()
         end
@@ -111,7 +111,7 @@ function AssertMonitorPresent() -- Called in MainProcess()
 
     else
         
-        if (MonitorWasPresent == true) then
+        if (monitorWasPresent == true) then
             ErrorLine("Monitor has been disconnected!")
         end
         return false
