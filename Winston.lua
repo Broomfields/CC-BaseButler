@@ -43,6 +43,7 @@ end
 function WriteLine(text, typeText)
 
     print("cursorPosY = " .. PosY)
+    PosY = PosY + Scale
 
     if (text == nil) then
         print("Error - WriteLine(text) - text == nil")
@@ -58,9 +59,7 @@ function WriteLine(text, typeText)
         -- Outputs to the Monitor if one is present
         if (Monitor ~= nil) then
 
-            Monitor.write(text)
-        
-            PosY = PosY + Scale
+            Monitor.write(text)        
             Monitor.setCursorPos(PosX, PosY)
         end
     end
