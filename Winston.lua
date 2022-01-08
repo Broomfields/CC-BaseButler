@@ -75,22 +75,37 @@ end
 
 -- Outputs a formatted message from the program to the computer and a connected Monitor
 function ComputerLine(text)
-    Monitor.setTextColour(colors.lightBlue)
+    
+    if (Monitor ~= nil) then
+        Monitor.setTextColour(colors.lightBlue)
+    end
+
     WriteLine(text, "Computer")
+    
 end
 
 
 -- Outputs a formatted message from chat to the computer and a connected Monitor
 function ChatLine(text)
-    Monitor.setTextColour(colors.white)
+    
+    if (Monitor ~= nil) then
+        Monitor.setTextColour(colors.white)
+    end
+
     WriteLine(text, "Chat")
+
 end
 
 
 -- Outputs a formatted error message to the computer and a connected Monitor
 function ErrorLine(text)
-    Monitor.setTextColour(colors.red)
+    
+    if (Monitor ~= nil) then
+        Monitor.setTextColour(colors.red)
+    end
+    
     WriteLine(text, "Error")
+
 end
 
 
