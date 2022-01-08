@@ -12,7 +12,7 @@
 ---------------------------
 
 -- Change to direction or find
-Monitor = peripheral.find("Monitor")
+Monitor = peripheral.find("monitor")
 
 Scale = 1
 
