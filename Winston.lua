@@ -148,7 +148,7 @@ function AssertCommand(text)
             print("Command Phrase: '" .. CommandPhrase .. "'")
             print("### End Command Assertion ###")
 
-            if (comparison == CommandPhrase) then
+            if (string.upper(comparison) == string.upper(CommandPhrase)) then
                 -- Command Found
                 return true
             end 
