@@ -77,6 +77,7 @@ function SendChat(text, prefix)
         if (ChatBox ~= nil) then
             ChatBox.sendMessage(text, prefix)
             print("Sent to chat : " .. text)
+            os.sleep(1)
         end
     end
 end
@@ -266,6 +267,9 @@ function MainProcess()
                 end
             end
         end
+
+        os.sleep(1)
+
     end
 
     ComputerLine("~ Terminating Instance") 
