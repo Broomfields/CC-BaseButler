@@ -11,16 +11,17 @@
 -- # Member Variable Declarations 
 ---------------------------
 
--- Change to direction or find
 Monitor = nil --peripheral.find("monitor")
+ChatBox = nil --peripheral.find("chatBox")
 
 Scale = 1
 
 PosX = Scale
 PosY = Scale
+    
+CommandUser = "Broomfields"     --Change to your user name
+CommandPhrase = "Winston"       --Change to your assistant name
 
-CommandUser = "Broomfields"
-CommandPhrase = "Winston"
 CommandPhraseLength = string.len(CommandPhrase)
 
 
@@ -66,6 +67,21 @@ function WriteLine(text, typeText)
 end
 
 
+-- Outputs any given text, and if specified, any give text type to the computer and a connected ChatBox
+function SendChat(text, prefix)
+
+    if (text == nil) then
+        print("Error - SendChat(text) - text == nil")
+    else
+        -- Outputs to the Monitor if one is present
+        if (ChatBox ~= nil) then
+            ChatBox.sendMessage(text, prefix)
+            print("Sent to chat : " .. text)
+        end
+    end
+end
+
+
 -- Outputs a new line to the computer
 function NewLine()
     WriteLine("")
@@ -80,6 +96,7 @@ function ComputerLine(text)
     end
 
     WriteLine(text, "Computer")
+    SendChat(text, CommandPhrase)
 
 end
 
@@ -134,6 +151,32 @@ function AssertMonitorPresent() -- Called in MainProcess()
 end
 
 
+-- Asserts if a ChatBox is connected, relaying a relative message if this is a new change and initialising a ChatBox it was just connected
+function AssertChatBoxPresent() -- Called in MainProcess()
+
+    local chatBoxWasPresent = (ChatBox ~= nil)
+
+    ChatBox = peripheral.find("chatBox")
+
+    if (ChatBox ~= nil) then
+        
+        if (chatBoxWasPresent == false) then
+            ComputerLine("ChatBox has been connected!")
+            -- InitialiseChatBox() -- No such function - may be in future
+        end
+        return true
+
+    else
+        
+        if (chatBoxWasPresent == true) then
+            ErrorLine("ChatBox has been disconnected!")
+        end
+        return false
+
+    end
+end
+
+
 -- Asserts that a command is present in the given text
 function AssertCommand(text)
 
@@ -172,22 +215,37 @@ function ParseCommand(text)
 end
 
 
+function RefreshDisplay()
+    
+    if (Monitor ~= nil) then
+
+        local monitorWidth = nil
+        local monitorHeight = nil
+        monitorWidth, monitorHeight = Monitor.getSize()
+
+        if (PosY > monitorHeight) then
+            Monitor.scroll(PosY - monitorHeight)      
+        end
+    end
+
+end
+
+
 -- Main Process Function (TODO : Turn in to State Machine)
 function MainProcess()
 
+    AssertChatBoxPresent()
     AssertMonitorPresent()
-
-    local box = peripheral.find("chatBox") -- Finds the peripheral if one is connected
-
-    if (box == nil) then
-    ErrorLine("chatBox not found")
-    end
 
     ComputerLine("Waiting for messages...")
     NewLine()
 
     local inError = false
     while inError == false do
+
+        AssertChatBoxPresent()
+        AssertMonitorPresent()
+        RefreshDisplay()
 
         local eventData = {os.pullEvent("chat")}
         local event = eventData[1]
@@ -196,25 +254,21 @@ function MainProcess()
             
         ChatLine("<" .. username .. "> " .. message)
 
-        --Change to your username    
         if (username == CommandUser) then
             if (AssertCommand(message)) then
                 
-                ComputerLine("### Command Identified ###")
-                box.sendMessage("Command Identified")
+                ComputerLine("~ Command Identified")
                 
                 if (ParseCommand(message)) then
-                    ComputerLine("### Command Parsed ###")
-                    box.sendMessage("Command Parsed")
+                    ComputerLine("~ Command Parsed")
                 else
-                    ComputerLine("### Command Not Parsed ### ")
-                    box.sendMessage("Command Not Parsed")
+                    ComputerLine("~ Command Not Parsed")
                 end
             end
         end
     end
 
-    ComputerLine("Terminating Instance.") 
+    ComputerLine("~ Terminating Instance") 
 end
 
 
