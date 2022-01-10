@@ -27,7 +27,38 @@ CommandPhraseLength = string.len(CommandPhrase)
 
 
 ---------------------------
--- # Functions 
+-- # General Utility Functions -- Will split off into a library later
+---------------------------
+
+-- Splits a string by a delimiter, defaults to whitespace
+function Split(s, delimiter)
+    result = {};
+
+    if (delimiter == nil) then -- default to whitespace
+        delimiter = " "
+    end    
+    
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+
+    return result;
+end
+
+
+-- Returns the count of a table
+function tableCount(table)
+    local count = 0
+    
+    for _ in pairs(table) do
+        count = count + 1
+    end
+    
+    return count
+  end
+
+---------------------------
+-- # Assistant Core Functions 
 ---------------------------
 
 -- Initialises a connected Monitor
@@ -211,7 +242,35 @@ end
 
 
 function ParseCommand(text)
-    -- TODO
+    
+    if (text ~= nil) then
+        local parts = Split(text)
+        local commandPhraseIndex = -1
+        
+        local count = tableCount(parts)
+        local index = 1 -- lua indexes start at 1
+        while (index < count) do
+
+            local part = parts[index]
+
+            if (commandPhraseIndex == -1) then
+                
+                if (string.upper(part) == string.upper(AssertCommand)) then
+                    commandPhraseIndex = index
+                end
+
+            else
+
+                -- TODO
+
+            end
+
+            -- TODO
+
+        end
+
+    end
+
     return false
 end
 
