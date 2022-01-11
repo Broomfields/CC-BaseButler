@@ -26,16 +26,21 @@ CommandPhraseLength = string.len(CommandPhrase)
 
 Programs = {};
 table.insert(Programs, "Information")
-table.insert(Programs, "Update")
+table.insert(Programs, "Update")            -- Set And Get
 table.insert(Programs, "Reboot")
 table.insert(Programs, "Message")
-table.insert(Programs, "CommandUser")
-table.insert(Programs, "CommandPhrase")
-table.insert(Programs, "MonitorColour")
-table.insert(Programs, "MonitorTextColour")
-table.insert(Programs, "MonitorScale")
-table.insert(Programs, "Mute")
-table.insert(Programs, "Unmute")
+table.insert(Programs, "Message")
+table.insert(Programs, "Speak")
+table.insert(Programs, "CommandUser")       -- Set And Get
+table.insert(Programs, "CommandPhrase")     -- Set And Get
+table.insert(Programs, "Label")             -- Set And Get
+table.insert(Programs, "MonitorColour")     -- Set And Get
+table.insert(Programs, "MonitorTextColour") -- Set And Get
+table.insert(Programs, "MonitorScale")      -- Set And Get
+table.insert(Programs, "Mute")              -- Set And Get
+
+-- Set And Get Power Networks (Network is defined with ID and has configurable ports)
+table.insert(Programs, "Power")  -- Network{On, Off}, Network{Set, Edit, Remove [Input, Output] ports}, Network{List [Input, Output, All] ports and networks}, Network{Measure (Total Difference, Active Difference, Active Rate)}, Network{Ratio}
 
 
 
@@ -68,7 +73,7 @@ function Count(table)
     end
     
     return count
-  end
+end
 
 ---------------------------
 -- # Assistant Core Functions 
@@ -254,6 +259,7 @@ function AssertCommand(text)
 end
 
 
+-- Parses identified command line in chat and calls relevant program
 function ParseCommand(text)
     
     if (text ~= nil) then
@@ -276,29 +282,31 @@ function ParseCommand(text)
                     commandPhraseIndex = partIndex
                 end
 
-            else
+            -- Identify Command / Program
+            elseif (commandProgramIndex == -1) then
 
-                -- Identify Command / Program
-                if (commandProgramIndex == -1) then
-        
-                    local programIndex = 1 -- lua indexes start at 1        
-                    while (programIndex < programsCount) do
+                local programIndex = 1 -- lua indexes start at 1        
+                while (programIndex < programsCount) do
 
-                        if (string.upper(part) == string.upper()) then
-                            commandProgramIndex = programIndex
-                        end
+                    local program = Programs[programIndex]
 
+                    if (string.upper(part) == string.upper(program)) then
+                        commandProgramIndex = programIndex
+                        break
                     end
-    
-                else
-    
-                    -- TODO
-    
+
+                end
+
+                if (commandProgramIndex > -1) then
+                    break
                 end
 
             end
 
-            -- TODO
+            -- Run Identified Program
+            if (commandProgramIndex > -1) then -- Maybe add option for searching args later
+                RunProgram(Programs[programIndex])
+            end
 
         end
 
@@ -308,6 +316,17 @@ function ParseCommand(text)
 end
 
 
+-- Runs given program
+function RunProgram(text)
+
+    if (text ~= nil) then
+        -- ToDo
+    end
+
+end
+
+
+-- Refreshes Display
 function RefreshDisplay()
     
     if (Monitor ~= nil) then
