@@ -24,6 +24,19 @@ CommandPhrase = "Winston"       --Change to your assistant name
 
 CommandPhraseLength = string.len(CommandPhrase)
 
+Programs = {};
+table.insert(Programs, "Information")
+table.insert(Programs, "Update")
+table.insert(Programs, "Reboot")
+table.insert(Programs, "Message")
+table.insert(Programs, "CommandUser")
+table.insert(Programs, "CommandPhrase")
+table.insert(Programs, "MonitorColour")
+table.insert(Programs, "MonitorTextColour")
+table.insert(Programs, "MonitorScale")
+table.insert(Programs, "Mute")
+table.insert(Programs, "Unmute")
+
 
 
 ---------------------------
@@ -47,7 +60,7 @@ end
 
 
 -- Returns the count of a table
-function tableCount(table)
+function Count(table)
     local count = 0
     
     for _ in pairs(table) do
@@ -246,22 +259,42 @@ function ParseCommand(text)
     if (text ~= nil) then
         local parts = Split(text)
         local commandPhraseIndex = -1
+        local commandProgramIndex = -1
         
-        local count = tableCount(parts)
-        local index = 1 -- lua indexes start at 1
-        while (index < count) do
+        local programsCount = Count(Programs)
+        local partsCount = Count(parts)
+        
+        local partIndex = 1 -- lua indexes start at 1
+        while (partIndex < partsCount) do
 
-            local part = parts[index]
+            local part = parts[partIndex]
 
+            -- Identify Command Phrase
             if (commandPhraseIndex == -1) then
                 
-                if (string.upper(part) == string.upper(AssertCommand)) then
-                    commandPhraseIndex = index
+                if (string.upper(part) == string.upper(CommandPhrase)) then
+                    commandPhraseIndex = partIndex
                 end
 
             else
 
-                -- TODO
+                -- Identify Command / Program
+                if (commandProgramIndex == -1) then
+        
+                    local programIndex = 1 -- lua indexes start at 1        
+                    while (programIndex < programsCount) do
+
+                        if (string.upper(part) == string.upper()) then
+                            commandProgramIndex = programIndex
+                        end
+
+                    end
+    
+                else
+    
+                    -- TODO
+    
+                end
 
             end
 
