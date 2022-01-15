@@ -12,3 +12,17 @@ A Modded-Minecraft Automation Assistant built in 'Computer Craft'/'CC: Tweaked' 
 * Better I/O handling - wish to be bale to run without a screen and without a chatbox
 * Implement configuration files
 * Implement assistant's programs/actions parsing with the ability for actions and to modularly store and access these on seperate disks (e.g. a disk for working with Mekanism).
+* Implement following programs ... 
+* Information
+* Update
+* Reboot
+* Message
+* Message
+* Speak
+* CommandUser
+* CommandPhrase
+* Label
+* MonitorColour
+* MonitorTextColour
+* MonitorScale
+* Mute

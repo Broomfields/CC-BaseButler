@@ -270,10 +270,16 @@ function ParseCommand(text)
         local programsCount = Count(Programs)
         local partsCount = Count(parts)
         
-        local partIndex = 1 -- lua indexes start at 1
+        print("[DEBUG] Parts Count = " .. partsCount)
+
+        local partIndex = 0 -- lua indexes start at 1, so increment at start
         while (partIndex < partsCount) do
 
+            partIndex = partIndex + 1
+
             local part = parts[partIndex]
+
+            print("[DEBUG] Parts Index = " .. partsCount .. " | Part = " .. part)
 
             -- Identify Command Phrase
             if (commandPhraseIndex == -1) then
@@ -285,16 +291,24 @@ function ParseCommand(text)
             -- Identify Command / Program
             elseif (commandProgramIndex == -1) then
 
-                local programIndex = 1 -- lua indexes start at 1        
+                print("[DEBUG] Program Count = " .. programsCount)
+
+                local programIndex = 1 -- lua indexes start at 1, so increment at start      
                 while (programIndex < programsCount) do
+                    programIndex = programIndex + 1
 
                     local program = Programs[programIndex]
 
+                    print("[DEBUG] Program Index = " .. programIndex .. " | Program = " .. program)
+
                     if (string.upper(part) == string.upper(program)) then
                         commandProgramIndex = programIndex
+                        print("[DEBUG] Program Matched!")
+
                         break
                     end
 
+                    os.sleep(0) -- Allow for thread to yield
                 end
 
                 if (commandProgramIndex > -1) then
@@ -305,11 +319,14 @@ function ParseCommand(text)
 
             -- Run Identified Program
             if (commandProgramIndex > -1) then -- Maybe add option for searching args later
+                print("[DEBUG] Running Program: " .. Programs[programIndex])
                 RunProgram(Programs[programIndex])
+                return true
             end
 
         end
 
+        os.sleep(0) -- Allow for thread to yield
     end
 
     return false
