@@ -266,6 +266,7 @@ function ParseCommand(text)
         local parts = Split(text)
         local commandPhraseIndex = -1
         local commandProgramIndex = -1
+        local matchedProgram = nil
         
         local programsCount = Count(Programs)
         local partsCount = Count(parts)
@@ -303,22 +304,22 @@ function ParseCommand(text)
 
                     if (string.upper(part) == string.upper(program)) then
                         commandProgramIndex = programIndex
+                        matchedProgram = Programs[programIndex]
                         print("[DEBUG] Program Matched!")
-
                         break
                     end
 
                     os.sleep(0) -- Allow for thread to yield
                 end
 
-                if (commandProgramIndex > -1) then
+                if (matchedProgram ~= nil) then
                     break
                 end
 
             end
 
             -- Run Identified Program
-            if (commandProgramIndex > -1) then -- Maybe add option for searching args later
+            if (matchedProgram ~= nil) then -- Maybe add option for searching args later
                 print("[DEBUG] Running Program: " .. Programs[programIndex])
                 RunProgram(Programs[programIndex])
                 return true
