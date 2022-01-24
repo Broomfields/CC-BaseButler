@@ -42,9 +42,9 @@ table.insert(Programs, "Mute")              -- Set And Get
 table.insert(Programs, "Power")  -- Network{On, Off}, Network{Set, Edit, Remove [Input, Output] ports}, Network{List [Input, Output, All] ports and networks}, Network{Measure (Total Difference, Active Difference, Active Rate)}, Network{Ratio}
 
 
-os.loadAPI("Utility")
-os.loadAPI("Peripherals")
-os.loadAPI("Interaction")
+os.loadAPI("BaseButler/utility.lua")
+os.loadAPI("BaseButler/peripherals.lua")
+os.loadAPI("BaseButler/interaction.lua")
 
 
 ---------------------------
@@ -55,13 +55,13 @@ os.loadAPI("Interaction")
 function ParseCommand(text)
     
     if (text ~= nil) then
-        local parts = Split(text)
+        local parts = utility.Split(text)
         local commandPhraseIndex = -1
         local commandProgramIndex = -1
         local matchedProgram = nil
         
-        local programsCount = Count(Programs)
-        local partsCount = Count(parts)
+        local programsCount = utility.Count(Programs)
+        local partsCount = utility.Count(parts)
         
         print("[DEBUG] Parts Count = " .. partsCount)
 
@@ -143,32 +143,32 @@ end
 function MainProcess()
 
 
-    Interaction.ComputerLine("Waiting for messages...")
-    Interaction.NewLine()
+    interaction.ComputerLine("Waiting for messages...")
+    interaction.NewLine()
 
     local inError = false
     while inError == false do
 
-        Peripherals.AssertChatBoxPresent(ChatBox)
-        Peripherals.AssertMonitorPresent(Monitor)
-        Interaction.RefreshDisplay(Monitor)
+        peripherals.AssertChatBoxPresent(ChatBox)
+        peripherals.AssertMonitorPresent(Monitor)
+        interaction.RefreshDisplay(Monitor)
 
         local eventData = {os.pullEvent("chat")}
         local event = eventData[1]
         local username = eventData[2]
         local message = eventData[3]
             
-        Interaction.ChatLine("<" .. username .. "> " .. message)
+        interaction.ChatLine("<" .. username .. "> " .. message)
 
         if (username == CommandUser) then
             if (AssertCommand(message)) then
                 
-                Interaction.ComputerLine("~ Command Identified")
+                interaction.ComputerLine("~ Command Identified")
                 
                 if (ParseCommand(message)) then
-                    Interaction.ComputerLine("~ Command Parsed")
+                    interaction.ComputerLine("~ Command Parsed")
                 else
-                    Interaction.ComputerLine("~ Command Not Parsed")
+                    interaction.ComputerLine("~ Command Not Parsed")
                 end
             end
         end
@@ -177,7 +177,7 @@ function MainProcess()
 
     end
 
-    Interaction.ComputerLine("~ Terminating Instance") 
+    interaction.ComputerLine("~ Terminating Instance") 
 end
 
 

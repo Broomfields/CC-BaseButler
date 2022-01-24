@@ -2,7 +2,7 @@
 -- # Title : Base Butler - Peripherals Handler  
 ------------------------------------------------------
 
-os.loadAPI("Interaction")
+os.loadAPI("BaseButler/interaction.lua")
 
 -- Initialises a connected Monitor
 function InitialiseMonitor(monitor)    --Called only by AssertMonitorPresent()
@@ -27,13 +27,13 @@ function AssertMonitorPresent(monitor) -- Called in MainProcess()
     if (monitorPresent == true) then
         
         if (monitorWasPresent == false) then
-            Interaction.ComputerLine("Monitor has been connected!")
+            interaction.ComputerLine("Monitor has been connected!")
             InitialiseMonitor()
         end
     else
         
         if (monitorWasPresent == true) then
-            Interaction.ErrorLine("Monitor has been disconnected!")
+            interaction.ErrorLine("Monitor has been disconnected!")
         end
     end
 
@@ -51,13 +51,13 @@ function AssertChatBoxPresent(chatBox) -- Called in MainProcess()
     if (chatBoxPresent == true) then
         
         if (chatBoxWasPresent == false) then
-            Interaction.ComputerLine("ChatBox has been connected!")
+            interaction.ComputerLine("ChatBox has been connected!")
             -- InitialiseChatBox() -- No such function - may be in future
         end
     else
         
         if (chatBoxWasPresent == true) then
-            Interaction.ErrorLine("ChatBox has been disconnected!")
+            interaction.ErrorLine("ChatBox has been disconnected!")
         end
     end
 
