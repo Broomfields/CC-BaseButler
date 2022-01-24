@@ -1,4 +1,4 @@
-# Winston
+# Base Butler
 
 A Modded-Minecraft Automation Assistant built in 'Computer Craft'/'CC: Tweaked' and 'Advanced Peripherals'.
 
@@ -16,7 +16,6 @@ A Modded-Minecraft Automation Assistant built in 'Computer Craft'/'CC: Tweaked' 
 * Information
 * Update
 * Reboot
-* Message
 * Message
 * Speak
 * CommandUser
