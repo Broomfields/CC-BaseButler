@@ -14,6 +14,8 @@ function InitialiseMonitor(monitor)    --Called only by AssertMonitorPresent()
         monitor.setCursorPos(1,1)
         monitor.clear()
     end
+
+    return monitor
 end
 
 
@@ -27,17 +29,17 @@ function AssertMonitorPresent(monitor) -- Called in MainProcess()
     if (monitorPresent == true) then
         
         if (monitorWasPresent == false) then
-            interaction.ComputerLine("Monitor has been connected!")
-            InitialiseMonitor()
+            interaction.ComputerLine("Monitor has been connected!", monitor)
+            monitor = InitialiseMonitor()
         end
     else
         
         if (monitorWasPresent == true) then
-            interaction.ErrorLine("Monitor has been disconnected!")
+            interaction.ErrorLine("Monitor has been disconnected!", monitor)
         end
     end
 
-    return monitorPresent
+    return monitor
 end
 
 
@@ -51,15 +53,15 @@ function AssertChatBoxPresent(chatBox) -- Called in MainProcess()
     if (chatBoxPresent == true) then
         
         if (chatBoxWasPresent == false) then
-            interaction.ComputerLine("ChatBox has been connected!")
+            interaction.ComputerLine("ChatBox has been connected!", monitor)
             -- InitialiseChatBox() -- No such function - may be in future
         end
     else
         
         if (chatBoxWasPresent == true) then
-            interaction.ErrorLine("ChatBox has been disconnected!")
+            interaction.ErrorLine("ChatBox has been disconnected!", monitor)
         end
     end
 
-    return chatBoxPresent
+    return chatBox
 end

@@ -19,7 +19,7 @@ function WriteLine(monitor, text, typeText) -- monitor essential so place at beg
     print("cursorPosY = " .. PosY)
 
     if (text == nil) then
-        print("Error - WriteLine(text) - text == nil")
+        print("Error - WriteLine(monitor, text) - text == nil")
     else
 
         -- Outputs to computer
@@ -57,8 +57,8 @@ end
 
 
 -- Outputs a new line to the computer
-function NewLine()
-    WriteLine("")
+function NewLine(monitor)
+    WriteLine(monitor, "")
 end
 
 
@@ -82,7 +82,7 @@ function ChatLine(text, monitor) -- monitor allowed to be null so place at end
         monitor.setTextColour(colors.white)
     end
 
-    WriteLine(text, "Chat")
+    WriteLine(monitor, text, "Chat")
 
 end
 
@@ -94,7 +94,7 @@ function ErrorLine(text, monitor) -- monitor allowed to be null so place at end
         monitor.setTextColour(colors.red)
     end
     
-    WriteLine(text, "Error")
+    WriteLine(monitor, text, "Error")
 
 end
 

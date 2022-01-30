@@ -51,6 +51,39 @@ os.loadAPI("BaseButler/interaction.lua")
 -- # Assistant Core Functions 
 ---------------------------
 
+
+-- Asserts that a command is present in the given text
+function AssertCommand(text)
+
+    if (text ~= nil) then
+
+        if (string.len(text) >= CommandPhraseLength) then
+
+            local comparison = string.sub(text, 1, CommandPhraseLength)
+            print("### Command Assertion ###")
+            print("Text: '" .. text .. "'")
+            print("Subbed Comparison: '" .. comparison .. "'")
+            print("Command Phrase: '" .. CommandPhrase .. "'")
+            print("### End Command Assertion ###")
+
+            if (string.upper(comparison) == string.upper(CommandPhrase)) then
+                -- Command Found
+                return true
+            end 
+
+        end
+
+    else
+
+        print("Error - AssertCommand(text) - text == nil")
+
+    end
+
+    -- Command Not Found
+    return false
+end
+
+
 -- Parses identified command line in chat and calls relevant program
 function ParseCommand(text)
     
@@ -142,15 +175,14 @@ end
 -- Main Process Function (TODO : Turn in to State Machine)
 function MainProcess()
 
-
-    interaction.ComputerLine("Waiting for messages...")
-    interaction.NewLine()
+    interaction.ComputerLine("Waiting for messages...", Monitor)
+    interaction.NewLine(Monitor)
 
     local inError = false
     while inError == false do
 
-        peripherals.AssertChatBoxPresent(ChatBox)
-        peripherals.AssertMonitorPresent(Monitor)
+        ChatBox = peripherals.AssertChatBoxPresent(ChatBox)
+        Monitor = peripherals.AssertMonitorPresent(Monitor)
         interaction.RefreshDisplay(Monitor)
 
         local eventData = {os.pullEvent("chat")}
@@ -158,17 +190,18 @@ function MainProcess()
         local username = eventData[2]
         local message = eventData[3]
             
-        interaction.ChatLine("<" .. username .. "> " .. message)
+        local monitorChatLine = ("<" .. username .. "> " .. message)
+        interaction.ChatLine(monitorChatLine, Monitor)
 
         if (username == CommandUser) then
             if (AssertCommand(message)) then
                 
-                interaction.ComputerLine("~ Command Identified")
+                interaction.ComputerLine("~ Command Identified", Monitor)
                 
                 if (ParseCommand(message)) then
-                    interaction.ComputerLine("~ Command Parsed")
+                    interaction.ComputerLine("~ Command Parsed", Monitor)
                 else
-                    interaction.ComputerLine("~ Command Not Parsed")
+                    interaction.ComputerLine("~ Command Not Parsed", Monitor)
                 end
             end
         end
@@ -177,7 +210,7 @@ function MainProcess()
 
     end
 
-    interaction.ComputerLine("~ Terminating Instance") 
+    interaction.ComputerLine("~ Terminating Instance", Monitor) 
 end
 
 
